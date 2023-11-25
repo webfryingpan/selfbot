@@ -1,5 +1,6 @@
-.idea
+.idea/
 node_modules/
+
 config.json
 output.txt
 package-lock.json
