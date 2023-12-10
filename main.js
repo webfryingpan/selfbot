@@ -1,12 +1,11 @@
 const {Client} = require("discord.js-selfbot-v13");
 const client = new Client({checkUpdate: false});
 
-
 const fs = require("fs");
 const cfg = require("./config.json");
 const prefix = "r!run";
 
-
+// TODO: DATABASE
 client.on("ready", async () => {
     console.log(`${client.user.username} is ready!`);
 });
@@ -16,8 +15,8 @@ client.on("messageCreate", async (message) => {
     const args = message.content.slice(prefix.length).trim().split(/ +/);
     const command = args.shift().toLowerCase();
 
-    if (cfg.reading.toLowerCase() && message.guild.id == cfg.serverID) console.log(returnFormatted(message));
-    if (cfg.writing.toLowerCase() && message.guild.id == cfg.serverID) writeOutput(returnFormatted(message));
+    if (!!(+cfg.reading) && message.guild.id == cfg.serverID) console.log(returnFormatted(message));
+    if (!!(+cfg.writing) && message.guild.id == cfg.serverID) writeOutput(returnFormatted(message));
 
     if (command == "cfg" && message.author == client.user) {
         configureJSON(args[0], args[1]);
@@ -32,16 +31,19 @@ client.on("messageCreate", async (message) => {
 
 function returnFormatted(msg) {
     let outputMessage;
-    let channel = msg.channel.name;
+
+    let channel = `channel: ${msg.channel.name}.`;
+    let author = `author: ${msg.author.username}.`;
+
     if (msg.embeds.length == 1) {
-        let title = msg.embeds[0].title;
-        let desc = msg.embeds[0].description;
-        outputMessage = `title: ${title}. ${desc ? "text: " + desc : ""}  channel: ${channel}.\n`;
+        let title = `${msg.embeds[0].title ? "title: " + msg.embeds[0].title + "." : ""}`;
+        let desc = `${msg.embeds[0].description ? "description: " + msg.embeds[0].description + "." : ""}`;
+        outputMessage = `${title} ${desc} ${author} ${channel} \n`;
     } else {
-        let content = msg.content;
-        let author = msg.author.username;
-        outputMessage = `text: ${content}. channel: ${channel}. author: ${author}.\n`;
+        let content = `${msg.content ? "content: " + msg.content + "." : ""}`;
+        outputMessage = `${content} ${author} ${channel}\n`;
     }
+
     return outputMessage;
 }
 
@@ -67,7 +69,6 @@ function clearTXT() {
     fs.writeFile("./output.txt", "cleared", (err) => {
         if (err) throw err;
     });
-
 }
 
 function restart() {
