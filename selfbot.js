@@ -1,12 +1,11 @@
-import { Client } from "discord.js-selfbot-v13";
-import { insertMessage, truncateMessages } from "./databaseControl.js";
-import fs from "fs";
-
 /**
- * SelfBot class representing a Discord selfbot functionality.
+ * @class SelfBot
+ * @classdesc Represents a Discord selfbot functionality.
+ * @param {Object} config - Configuration object.
  */
 class SelfBot {
     /**
+     * @constructor
      * @param {Object} config - Configuration object.
      */
     constructor(config) {
@@ -50,6 +49,10 @@ class SelfBot {
         }
     }
 
+    /**
+     * Saves a message to the database.
+     * @param {Object} msg - Discord message object.
+     */
     saveToDB(msg) {
         insertMessage({
             message_id: msg.id,
