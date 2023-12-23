@@ -1,3 +1,7 @@
+import { Client } from "discord.js-selfbot-v13";
+import { insertMessage, truncateMessages } from "./databaseControl.js";
+import fs from "fs";
+
 /**
  * @class SelfBot
  * @classdesc Represents a Discord selfbot functionality.
